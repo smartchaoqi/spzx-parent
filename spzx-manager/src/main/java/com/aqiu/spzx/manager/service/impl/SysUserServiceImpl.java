@@ -1,10 +1,12 @@
 package com.aqiu.spzx.manager.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.aqiu.spzx.common.exception.GuiguException;
 import com.aqiu.spzx.manager.mapper.SysUserMapper;
 import com.aqiu.spzx.manager.service.SysUserService;
 import com.aqiu.spzx.model.dto.system.LoginDto;
 import com.aqiu.spzx.model.entity.system.SysUser;
+import com.aqiu.spzx.model.vo.common.ResultCodeEnum;
 import com.aqiu.spzx.model.vo.system.LoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -29,14 +31,14 @@ public class SysUserServiceImpl implements SysUserService {
         // 根据用户名查询用户
         SysUser sysUser = sysUserMapper.selectByUserName(loginDto.getUserName());
         if(sysUser == null) {
-            throw new RuntimeException("用户名或者密码错误") ;
+            throw new GuiguException(ResultCodeEnum.LOGIN_ERROR);
         }
 
         // 验证密码是否正确
         String inputPassword = loginDto.getPassword();
         String md5InputPassword = DigestUtils.md5DigestAsHex(inputPassword.getBytes());
         if(!md5InputPassword.equals(sysUser.getPassword())) {
-            throw new RuntimeException("用户名或者密码错误") ;
+            throw new GuiguException(ResultCodeEnum.LOGIN_ERROR);
         }
 
         // 生成令牌，保存数据到Redis中
