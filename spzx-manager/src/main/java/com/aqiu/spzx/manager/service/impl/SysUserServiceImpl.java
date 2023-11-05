@@ -1,5 +1,7 @@
 package com.aqiu.spzx.manager.service.impl;
 
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.excel.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.aqiu.spzx.common.exception.GuiguException;
 import com.aqiu.spzx.manager.mapper.SysUserMapper;
@@ -27,6 +29,15 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public LoginVo login(LoginDto loginDto) {
+
+        String captcha = loginDto.getCaptcha();
+        String codeKey = loginDto.getCodeKey();
+        String redisCode = redisTemplate.opsForValue().get("user:validate" + codeKey);
+        if (StrUtil.isEmpty(redisCode)||!StrUtil.equals(captcha,redisCode)){
+            throw new GuiguException(ResultCodeEnum.VALIDATECODE_ERROR);
+        }
+
+        redisTemplate.delete("user:validate" + codeKey);
 
         // 根据用户名查询用户
         SysUser sysUser = sysUserMapper.selectByUserName(loginDto.getUserName());
