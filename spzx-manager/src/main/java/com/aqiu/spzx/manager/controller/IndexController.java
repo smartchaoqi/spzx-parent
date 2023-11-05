@@ -1,8 +1,10 @@
 package com.aqiu.spzx.manager.controller;
 
+import cn.hutool.http.server.HttpServerRequest;
 import com.aqiu.spzx.manager.service.SysUserService;
 import com.aqiu.spzx.manager.service.ValidateCodeService;
 import com.aqiu.spzx.model.dto.system.LoginDto;
+import com.aqiu.spzx.model.entity.system.SysUser;
 import com.aqiu.spzx.model.vo.common.Result;
 import com.aqiu.spzx.model.vo.common.ResultCodeEnum;
 import com.aqiu.spzx.model.vo.system.LoginVo;
@@ -34,6 +36,12 @@ public class IndexController {
     public Result<ValidateCodeVo> generateValidateCode() {
         ValidateCodeVo vo = validateCodeService.generateValidateCode();
         return Result.build(vo , ResultCodeEnum.SUCCESS);
+    }
+
+    @GetMapping("/getUserInfo")
+    public Result getUserInfo(@RequestHeader("token") String token) {
+        SysUser user = sysUserService.getUserInfo(token);
+        return Result.build(user , ResultCodeEnum.SUCCESS) ;
     }
 
 }
