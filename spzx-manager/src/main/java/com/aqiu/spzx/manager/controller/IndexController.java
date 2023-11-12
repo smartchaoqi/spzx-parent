@@ -9,6 +9,7 @@ import com.aqiu.spzx.model.vo.common.Result;
 import com.aqiu.spzx.model.vo.common.ResultCodeEnum;
 import com.aqiu.spzx.model.vo.system.LoginVo;
 import com.aqiu.spzx.model.vo.system.ValidateCodeVo;
+import com.aqiu.spzx.utils.AuthContextUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,15 @@ public class IndexController {
 
     @GetMapping("/getUserInfo")
     public Result getUserInfo(@RequestHeader("token") String token) {
-        SysUser user = sysUserService.getUserInfo(token);
-        return Result.build(user , ResultCodeEnum.SUCCESS) ;
+        SysUser sysUser = AuthContextUtil.get();
+//        SysUser user = sysUserService.getUserInfo(token);
+        return Result.build(sysUser , ResultCodeEnum.SUCCESS) ;
+    }
+
+    @GetMapping("/logout")
+    public Result logout(@RequestHeader("token") String token) {
+        sysUserService.logout(token);
+        return Result.build(null , ResultCodeEnum.SUCCESS) ;
     }
 
 }
