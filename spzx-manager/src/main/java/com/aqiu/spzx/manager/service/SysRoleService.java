@@ -8,4 +8,6 @@ public interface SysRoleService {
     PageInfo<SysRole> findByPage(Integer current, Integer limit, SysRoleDto sysRoleDto);
 
     void saveSysRole(SysRole sysRole);
+
+    void updateSysRole(SysRole sysRole);
 }
