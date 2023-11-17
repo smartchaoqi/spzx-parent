@@ -43,7 +43,7 @@ public class LoginAuthInterceptor implements HandlerInterceptor {
 
         SysUser sysUser = JSON.parseObject(userJson, SysUser.class);
         AuthContextUtil.set(sysUser);
-        redisTemplate.expire("user:login:" + token, 30, TimeUnit.SECONDS);
+        redisTemplate.expire("user:login:" + token, 30, TimeUnit.MINUTES);
         return true;
     }
 
