@@ -7,14 +7,18 @@ import com.aqiu.spzx.common.exception.GuiguException;
 import com.aqiu.spzx.manager.mapper.SysUserMapper;
 import com.aqiu.spzx.manager.service.SysUserService;
 import com.aqiu.spzx.model.dto.system.LoginDto;
+import com.aqiu.spzx.model.dto.system.SysUserDto;
 import com.aqiu.spzx.model.entity.system.SysUser;
 import com.aqiu.spzx.model.vo.common.ResultCodeEnum;
 import com.aqiu.spzx.model.vo.system.LoginVo;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -74,5 +78,34 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public void logout(String token) {
         redisTemplate.delete("user:login:" + token);
+    }
+
+    @Override
+    public PageInfo<SysUser> findByPage(Integer pageNum, Integer pageSize, SysUserDto sysUserDto) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<SysUser> result = sysUserMapper.findByPage(sysUserDto);
+        return PageInfo.of(result);
+    }
+
+    @Override
+    public void saveSysUser(SysUser sysUser) {
+        SysUser selectByUserName = sysUserMapper.selectByUserName(sysUser.getUserName());
+        if (selectByUserName!=null){
+            throw new GuiguException(ResultCodeEnum.USER_NAME_IS_EXISTS);
+        }
+        String password = sysUser.getPassword();
+        String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
+        sysUser.setPassword(md5Password);
+        sysUserMapper.save(sysUser);
+    }
+
+    @Override
+    public void updateSysUser(SysUser sysUser) {
+        sysUserMapper.update(sysUser);
+    }
+
+    @Override
+    public void deleteById(Long userId) {
+        sysUserMapper.delete(userId);
     }
 }
