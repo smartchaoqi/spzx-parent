@@ -1,6 +1,7 @@
 package com.aqiu.spzx.manager.controller;
 
 import com.aqiu.spzx.manager.service.SysUserService;
+import com.aqiu.spzx.model.dto.system.AssginRoleDto;
 import com.aqiu.spzx.model.dto.system.SysUserDto;
 import com.aqiu.spzx.model.entity.system.SysUser;
 import com.aqiu.spzx.model.vo.common.Result;
@@ -39,6 +40,12 @@ public class SysUserController {
     @DeleteMapping("/deleteById/{userId}")
     public Result deleteById(@PathVariable Long userId){
         sysUserService.deleteById(userId);
+        return Result.build(null,ResultCodeEnum.SUCCESS);
+    }
+
+    @PostMapping("/doAssign")
+    public Result doAssgin(@RequestBody AssginRoleDto assginRoleDto){
+        sysUserService.doAssign(assginRoleDto);
         return Result.build(null,ResultCodeEnum.SUCCESS);
     }
 

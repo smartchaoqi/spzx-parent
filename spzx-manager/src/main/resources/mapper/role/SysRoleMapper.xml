@@ -57,4 +57,8 @@
             </where>
             order by id desc
     </select>
+
+    <select id="findAll" resultType="com.aqiu.spzx.model.entity.system.SysRole">
+        select <include refid="columns"/> from sys_role where is_deleted=0
+    </select>
 </mapper>

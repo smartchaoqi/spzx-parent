@@ -4,8 +4,10 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.aqiu.spzx.common.exception.GuiguException;
+import com.aqiu.spzx.manager.mapper.SysRoleUserMapper;
 import com.aqiu.spzx.manager.mapper.SysUserMapper;
 import com.aqiu.spzx.manager.service.SysUserService;
+import com.aqiu.spzx.model.dto.system.AssginRoleDto;
 import com.aqiu.spzx.model.dto.system.LoginDto;
 import com.aqiu.spzx.model.dto.system.SysUserDto;
 import com.aqiu.spzx.model.entity.system.SysUser;
@@ -108,5 +110,18 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public void deleteById(Long userId) {
         sysUserMapper.delete(userId);
+    }
+
+    @Autowired
+    private SysRoleUserMapper sysRoleUserMapper;
+
+    @Override
+    public void doAssign(AssginRoleDto assginRoleDto) {
+        sysRoleUserMapper.deleteByUserId(assginRoleDto.getUserId());
+
+        List<Long> roleIdList = assginRoleDto.getRoleIdList();
+        for (Long aLong : roleIdList) {
+            sysRoleUserMapper.doAssign(assginRoleDto.getUserId(),aLong);
+        }
     }
 }
