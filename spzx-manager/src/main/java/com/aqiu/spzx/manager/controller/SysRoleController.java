@@ -6,7 +6,6 @@ import com.aqiu.spzx.model.entity.system.SysRole;
 import com.aqiu.spzx.model.vo.common.Result;
 import com.aqiu.spzx.model.vo.common.ResultCodeEnum;
 import com.github.pagehelper.PageInfo;
-import org.simpleframework.xml.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
