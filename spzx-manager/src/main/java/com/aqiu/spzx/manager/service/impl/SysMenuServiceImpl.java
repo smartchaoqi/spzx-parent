@@ -2,6 +2,7 @@ package com.aqiu.spzx.manager.service.impl;
 
 import com.aqiu.spzx.common.exception.GuiguException;
 import com.aqiu.spzx.manager.mapper.SysMenuMapper;
+import com.aqiu.spzx.manager.mapper.SysRoleMenuMapper;
 import com.aqiu.spzx.manager.service.SysMenuService;
 import com.aqiu.spzx.manager.utils.MenuHelper;
 import com.aqiu.spzx.model.entity.system.SysMenu;
@@ -33,6 +34,19 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Override
     public void save(SysMenu sysMenu) {
         sysMenuMapper.insert(sysMenu);
+
+        updateSysRoleMenu(sysMenu);
+    }
+
+    @Autowired
+    private SysRoleMenuMapper sysRoleMenuMapper;
+
+    private void updateSysRoleMenu(SysMenu sysMenu) {
+        SysMenu parent = sysMenuMapper.selectParentMenu(sysMenu.getParentId());
+        if (parent!=null){
+            sysRoleMenuMapper.updateSysRoleMenuIsHalf(parent.getId());
+            updateSysRoleMenu(parent);
+        }
     }
 
     @Override
