@@ -20,4 +20,8 @@
         select count(*) from category where parent_id = #{id} and is_deleted = 0
     </select>
 
+    <select id="findAll" resultMap="categoryMap">
+        select <include refid="columns"/> from category where is_deleted = 0 order by id
+    </select>
+
 </mapper>
