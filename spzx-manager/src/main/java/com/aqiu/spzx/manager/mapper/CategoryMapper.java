@@ -14,4 +14,5 @@ public interface CategoryMapper {
 
     List<Category> findAll();
 
+    public void batchInsert(List<Category> categoryList);
 }
