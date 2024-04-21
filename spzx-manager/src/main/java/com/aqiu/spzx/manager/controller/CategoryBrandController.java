@@ -2,12 +2,15 @@ package com.aqiu.spzx.manager.controller;
 
 import com.aqiu.spzx.manager.service.CategoryBrandService;
 import com.aqiu.spzx.model.dto.product.CategoryBrandDto;
+import com.aqiu.spzx.model.entity.product.Brand;
 import com.aqiu.spzx.model.entity.product.CategoryBrand;
 import com.aqiu.spzx.model.vo.common.Result;
 import com.aqiu.spzx.model.vo.common.ResultCodeEnum;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/admin/product/categoryBrand")
@@ -38,6 +41,12 @@ public class CategoryBrandController {
     public Result deleteById(@PathVariable Long id) {
         categoryBrandService.deleteById(id);
         return Result.build(null,ResultCodeEnum.SUCCESS);
+    }
+
+    @GetMapping("/findBrandByCategoryId/{categoryId}")
+    public Result findBrandByCategoryId(@PathVariable Long categoryId) {
+        List<Brand> list = categoryBrandService.findBrandByCategoryId(categoryId);
+        return Result.build(list, ResultCodeEnum.SUCCESS);
     }
 
 }

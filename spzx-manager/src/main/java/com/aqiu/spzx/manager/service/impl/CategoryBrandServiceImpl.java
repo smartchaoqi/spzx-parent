@@ -3,6 +3,7 @@ package com.aqiu.spzx.manager.service.impl;
 import com.aqiu.spzx.manager.mapper.CategoryBrandMapper;
 import com.aqiu.spzx.manager.service.CategoryBrandService;
 import com.aqiu.spzx.model.dto.product.CategoryBrandDto;
+import com.aqiu.spzx.model.entity.product.Brand;
 import com.aqiu.spzx.model.entity.product.CategoryBrand;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -37,5 +38,10 @@ public class CategoryBrandServiceImpl implements CategoryBrandService {
     @Override
     public void deleteById(Long id) {
         categoryBrandMapper.deleteById(id);
+    }
+
+    @Override
+    public List<Brand> findBrandByCategoryId(Long categoryId) {
+        return categoryBrandMapper.findBrandByCategoryId(categoryId);
     }
 }

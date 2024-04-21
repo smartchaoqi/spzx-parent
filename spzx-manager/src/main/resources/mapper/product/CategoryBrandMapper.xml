@@ -57,4 +57,11 @@
         <include refid="findPageWhere"/>
         order by cb.id desc
     </select>
+
+    <select id="findBrandByCategoryId" resultType="com.aqiu.spzx.model.entity.product.Brand">
+        select b.id,b.name,b.logo,b.create_time,b.update_time,b.is_deleted from category_brand cb
+        left join brand b on cb.brand_id = b.id
+        where cb.category_id = #{categoryId} and cb.is_deleted = 0
+        order by cb.id desc
+    </select>
 </mapper>
