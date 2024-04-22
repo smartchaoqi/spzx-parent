@@ -34,7 +34,7 @@ public class ProductController {
         return Result.build(product,ResultCodeEnum.SUCCESS);
     }
 
-    @PostMapping("/updateById")
+    @PutMapping("/updateById")
     public Result updateById(@RequestBody Product product) {
         productService.updateById(product);
         return Result.build(null,ResultCodeEnum.SUCCESS);
