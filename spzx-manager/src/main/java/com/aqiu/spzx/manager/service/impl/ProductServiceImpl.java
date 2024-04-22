@@ -84,4 +84,38 @@ public class ProductServiceImpl implements ProductService {
         details.setImageUrls(product.getDetailsImageUrls());
         productDetailsMapper.updateById(details);
     }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        productMapper.deleteById(id);
+        productSkuMapper.deleteByProductId(id);
+        productDetailsMapper.deleteByProductId(id);
+    }
+
+    @Override
+    public void updateAuditStatus(Long id, Integer auditStatus) {
+        Product product = new Product();
+        product.setId(id);
+        if(auditStatus == 1) {
+            product.setAuditStatus(1);
+            product.setAuditMessage("审批通过");
+        } else {
+            product.setAuditStatus(-1);
+            product.setAuditMessage("审批不通过");
+        }
+        productMapper.updateById(product);
+    }
+
+    @Override
+    public void updateStatus(Long id, Integer status) {
+        Product product = new Product();
+        product.setId(id);
+        if(status == 1) {
+            product.setStatus(1);
+        } else {
+            product.setStatus(-1);
+        }
+        productMapper.updateById(product);
+    }
 }

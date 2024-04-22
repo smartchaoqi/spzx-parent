@@ -86,6 +86,13 @@
         id = #{id}
     </update>
 
+    <update id="deleteById">
+        update product set
+        is_deleted = 1,update_time = now()
+        where
+        id = #{id}
+    </update>
+
     <select id="findByPage" resultMap="productMap">
         select p.id, p.name , p.brand_id , p.category1_id , p.category2_id , p.category3_id, p.unit_name,p.slider_urls , p.spec_value , p.status, p.audit_status , p.audit_message , p.create_time , p.update_time , p.is_deleted ,
                b.name brandName,c1.name category1Name,c2.name category2Name,c3.name category3Name

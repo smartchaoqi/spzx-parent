@@ -94,6 +94,10 @@
         id = #{id}
     </update>
 
+    <update id="deleteByProductId">
+        update product_sku set is_deleted = 1,update_time=now() where product_id = #{productId}
+    </update>
+
     <select id="findByProductId" resultMap="productSkuMap">
         select <include refid="columns" />
         from product_sku
