@@ -1,7 +1,5 @@
 package com.aqiu.spzx.manager.controller;
 
-import com.aqiu.spzx.manager.mapper.ProductDetailsMapper;
-import com.aqiu.spzx.manager.mapper.ProductSkuMapper;
 import com.aqiu.spzx.manager.service.ProductService;
 import com.aqiu.spzx.model.dto.product.ProductDto;
 import com.aqiu.spzx.model.entity.product.Product;
@@ -26,6 +24,18 @@ public class ProductController {
     @PostMapping("/save")
     public Result save(@RequestBody Product product) {
         productService.save(product);
+        return Result.build(null,ResultCodeEnum.SUCCESS);
+    }
+
+    @GetMapping("/getById/{id}")
+    public Result getById(@PathVariable Long id) {
+        Product product = productService.getById(id);
+        return Result.build(product,ResultCodeEnum.SUCCESS);
+    }
+
+    @PostMapping("/updateById")
+    public Result updateById(@RequestBody Product product) {
+        productService.updateById(product);
         return Result.build(null,ResultCodeEnum.SUCCESS);
     }
 }

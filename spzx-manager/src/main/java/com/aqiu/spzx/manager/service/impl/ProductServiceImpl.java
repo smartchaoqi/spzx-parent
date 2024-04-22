@@ -56,4 +56,32 @@ public class ProductServiceImpl implements ProductService {
         details.setImageUrls(product.getDetailsImageUrls());
         productDetailsMapper.save(details);
     }
+
+    @Override
+    public Product getById(Long id) {
+        Product product = productMapper.getById(id);
+
+        List<ProductSku> productSkuList = productSkuMapper.findByProductId(id);
+        product.setProductSkuList(productSkuList);
+
+        ProductDetails productDetails = productDetailsMapper.getByProductId(id);
+        product.setDetailsImageUrls(productDetails.getImageUrls());
+        return product;
+    }
+
+    @Override
+    @Transactional
+    public void updateById(Product product) {
+        //修改product
+        productMapper.updateById(product);
+        //修改productSku
+        List<ProductSku> productSkuList = product.getProductSkuList();
+        for(ProductSku sku:productSkuList){
+            productSkuMapper.updateById(sku);
+        }
+        //修改productDetails
+        ProductDetails details = productDetailsMapper.getByProductId(product.getId());
+        details.setImageUrls(product.getDetailsImageUrls());
+        productDetailsMapper.updateById(details);
+    }
 }
