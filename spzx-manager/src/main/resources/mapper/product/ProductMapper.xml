@@ -11,6 +11,42 @@
             audit_message,create_time,update_time,is_deleted
     </sql>
 
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into product (
+            id,
+            name,
+            brand_id,
+            category1_id,
+            category2_id,
+            category3_id,
+            unit_name,
+            slider_urls,
+            spec_value,
+            status,
+            audit_status,
+            audit_message,
+            create_time,
+            update_time,
+            is_deleted
+        ) values (
+                     #{id},
+                     #{name},
+                     #{brandId},
+                     #{category1Id},
+                     #{category2Id},
+                     #{category3Id},
+                     #{unitName},
+                     #{sliderUrls},
+                     #{specValue},
+                     #{status},
+                     #{auditStatus},
+                     #{auditMessage},
+                     now(),
+                     now() ,
+                     0
+                 )
+    </insert>
+
     <select id="findByPage" resultMap="productMap">
         select p.id, p.name , p.brand_id , p.category1_id , p.category2_id , p.category3_id, p.unit_name,p.slider_urls , p.spec_value , p.status, p.audit_status , p.audit_message , p.create_time , p.update_time , p.is_deleted ,
                b.name brandName,c1.name category1Name,c2.name category2Name,c3.name category3Name
