@@ -1,5 +1,7 @@
 package com.aqiu.spzx.manager.controller;
 
+import com.aqiu.spzx.common.log.annotation.Log;
+import com.aqiu.spzx.common.log.enums.OperatorType;
 import com.aqiu.spzx.manager.service.BrandService;
 import com.aqiu.spzx.model.entity.product.Brand;
 import com.aqiu.spzx.model.vo.common.Result;
@@ -19,6 +21,7 @@ public class BrandController {
 
     //列表查询
     @GetMapping("/{page}/{limit}")
+    @Log(title = "品牌管理:列表",businessType = 0,operatorType = OperatorType.MANAGE)
     public Result list(@PathVariable Integer page, @PathVariable Integer limit) {
         PageInfo<Brand> pageInfo = brandService.findByPage(page, limit);
         return Result.build(pageInfo, ResultCodeEnum.SUCCESS);

@@ -1,5 +1,6 @@
 package com.aqiu.spzx.manager;
 
+import com.aqiu.spzx.common.log.annotation.EnableLogAspect;
 import com.aqiu.spzx.manager.properties.MinIoProperties;
 import com.aqiu.spzx.manager.properties.UserAuthProperties;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = {"com.aqiu.spzx"})
 @EnableConfigurationProperties(value = {UserAuthProperties.class, MinIoProperties.class})
 @EnableTransactionManagement
+@EnableLogAspect
 @EnableScheduling
 public class ManagerApplication {
     public static void main(String[] args) {
