@@ -16,7 +16,6 @@ import java.util.List;
 @Tag(name = "分类接口管理")
 @RestController
 @RequestMapping(value="/api/product/category")
-@CrossOrigin
 public class CategoryController {
 
     @Autowired
