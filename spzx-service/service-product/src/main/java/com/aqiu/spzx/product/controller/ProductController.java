@@ -4,9 +4,9 @@ import com.aqiu.spzx.model.dto.h5.ProductSkuDto;
 import com.aqiu.spzx.model.entity.product.ProductSku;
 import com.aqiu.spzx.model.vo.common.Result;
 import com.aqiu.spzx.model.vo.common.ResultCodeEnum;
+import com.aqiu.spzx.model.vo.h5.ProductItemVo;
 import com.aqiu.spzx.product.service.ProductService;
 import com.github.pagehelper.PageInfo;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,5 +25,11 @@ public class ProductController {
     public Result findByPage(@PathVariable Integer page, @PathVariable Integer limit, ProductSkuDto productSkuDto) {
         PageInfo<ProductSku> pageInfo = productService.findByPage(page, limit, productSkuDto);
         return Result.build(pageInfo, ResultCodeEnum.SUCCESS);
+    }
+
+    @GetMapping("item/{skuId}")
+    public Result item(@PathVariable Long skuId) {
+        ProductItemVo productItemVo = productService.item(skuId);
+        return Result.build(productItemVo, ResultCodeEnum.SUCCESS);
     }
 }

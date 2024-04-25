@@ -50,4 +50,16 @@
             order by ps.sale_price desc
         </if>
     </select>
+    <select id="findById" resultMap="productSkuMap">
+        select
+        <include refid="columns"/>
+        from product_sku
+        where id=#{id} and is_deleted=0
+    </select>
+    <select id="findByProductId" resultMap="productSkuMap">
+        select <include refid="columns" />
+        from product_sku
+        where
+        product_id = #{productId} and is_deleted = 0
+    </select>
 </mapper>
