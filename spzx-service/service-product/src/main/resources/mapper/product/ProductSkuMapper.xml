@@ -19,4 +19,35 @@
         where ps.is_deleted=0 and p.is_deleted=0 and p.status=1 and p.audit_status=1
         order by ps.sale_num desc limit 20
     </select>
+
+    <select id="findByPage" resultMap="productSkuMap">
+        select ps.id,ps.sku_code,ps.sku_name,ps.product_id,ps.thumb_img,ps.sale_price,ps.market_price,ps.cost_price,ps.stock_num,ps.sale_num,ps.sku_spec,ps.weight,ps.volume,ps.status,ps.create_time,ps.update_time,ps.is_deleted
+        from product_sku ps
+        left join product p on p.id=ps.product_id
+        where ps.is_deleted=0 and p.is_deleted=0 and p.status=1 and p.audit_status=1
+        <if test="keyword != null and keyword != ''">
+            and ps.sku_name like concat('%',#{keyword},'%')
+        </if>
+        <if test="brandId!=null and brandId!=''">
+            and p.brand_id=#{brandId}
+        </if>
+        <if test="category1Id!=null and category1Id!=''">
+            and p.category1_id=#{category1Id}
+        </if>
+        <if test="category2Id!=null and category2Id!=''">
+            and p.category2_id=#{category2Id}
+        </if>
+        <if test="category3Id!=null and category3Id!=''">
+            and p.category3_id=#{category3Id}
+        </if>
+        <if test="order==1">
+            order by ps.sale_num desc
+        </if>
+        <if test="order == 2">
+            order by ps.sale_price asc
+        </if>
+        <if test="order == 3">
+            order by ps.sale_price desc
+        </if>
+    </select>
 </mapper>
