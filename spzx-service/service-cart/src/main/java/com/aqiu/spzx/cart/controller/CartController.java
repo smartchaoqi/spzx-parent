@@ -4,6 +4,7 @@ import com.aqiu.spzx.cart.service.CartService;
 import com.aqiu.spzx.model.entity.h5.CartInfo;
 import com.aqiu.spzx.model.vo.common.Result;
 import com.aqiu.spzx.model.vo.common.ResultCodeEnum;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,13 @@ public class CartController {
     @DeleteMapping("auth/deleteCart/{skuId}")
     public Result deleteCart(@PathVariable("skuId") Long skuId) {
         cartService.deleteCart(skuId);
+        return Result.build(null, ResultCodeEnum.SUCCESS);
+    }
+
+    @GetMapping("/auth/checkCart/{skuId}/{isChecked}")
+    public Result checkCart(@PathVariable(value = "skuId") Long skuId,
+                            @PathVariable(value = "isChecked") Integer isChecked) {
+        cartService.checkCart(skuId, isChecked);
         return Result.build(null, ResultCodeEnum.SUCCESS);
     }
 }

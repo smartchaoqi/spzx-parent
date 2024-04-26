@@ -10,4 +10,6 @@ public interface CartService {
     List<CartInfo> cartList();
 
     void deleteCart(Long skuId);
+
+    void checkCart(Long skuId, Integer isChecked);
 }
