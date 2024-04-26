@@ -1,16 +1,23 @@
 package com.aqiu.spzx.cart.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.aqiu.spzx.cart.service.CartService;
 import com.aqiu.spzx.feign.product.ProductFeignClient;
+import com.aqiu.spzx.model.entity.base.BaseEntity;
 import com.aqiu.spzx.model.entity.h5.CartInfo;
 import com.aqiu.spzx.model.entity.product.ProductSku;
 import com.aqiu.spzx.utils.AuthContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -45,6 +52,21 @@ public class CartServiceImpl implements CartService {
             cartInfo.setUpdateTime(new Date());
         }
         redisTemplate.opsForHash().put(cartKey,skuId.toString(),JSON.toJSONString(cartInfo));
+    }
+
+    @Override
+    public List<CartInfo> cartList() {
+        Long userId = AuthContextUtil.getUserInfo().getId();
+        String cartKey = getCartKey(userId);
+        List<Object> values = redisTemplate.opsForHash().values(cartKey);
+        if (CollectionUtils.isNotEmpty(values)){
+            List<CartInfo> collect = values.stream()
+                    .map(o -> JSON.parseObject(o.toString(), CartInfo.class))
+                    .sorted((o1, o2) -> o2.getUpdateTime().compareTo(o1.getUpdateTime()))
+                    .collect(Collectors.toList());
+            return collect;
+        }
+        return new ArrayList<>();
     }
 
     private String getCartKey(Long userId) {
