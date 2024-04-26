@@ -10,6 +10,7 @@ import com.aqiu.spzx.model.vo.common.ResultCodeEnum;
 import com.aqiu.spzx.model.vo.h5.UserInfoVo;
 import com.aqiu.spzx.user.mapper.UserInfoMapper;
 import com.aqiu.spzx.user.service.UserInfoService;
+import com.aqiu.spzx.utils.AuthContextUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -83,11 +84,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public UserInfoVo getUserInfoByToken(String token) {
-        String userInfoStr = redisTemplate.opsForValue().get("user:spzx:" + token);
-        if(StringUtils.isBlank(userInfoStr)){
-            throw new GuiguException(ResultCodeEnum.LOGIN_AUTH) ;
-        }
-        UserInfo userInfo = JSON.parseObject(userInfoStr, UserInfo.class);
+        UserInfo userInfo = AuthContextUtil.getUserInfo();
         UserInfoVo userInfoVo = new UserInfoVo();
         BeanUtils.copyProperties(userInfo, userInfoVo);
         return userInfoVo;
