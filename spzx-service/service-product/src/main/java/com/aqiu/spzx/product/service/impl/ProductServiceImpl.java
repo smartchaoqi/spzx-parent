@@ -65,4 +65,9 @@ public class ProductServiceImpl implements ProductService {
         vo.setSkuSpecValueMap(skuSpecValueMap);
         return vo;
     }
+
+    @Override
+    public ProductSku getBySkuId(Long skuId) {
+        return productSkuMapper.findById(skuId);
+    }
 }
