@@ -7,8 +7,10 @@ import com.aqiu.spzx.model.dto.h5.UserLoginDto;
 import com.aqiu.spzx.model.dto.h5.UserRegisterDto;
 import com.aqiu.spzx.model.entity.user.UserInfo;
 import com.aqiu.spzx.model.vo.common.ResultCodeEnum;
+import com.aqiu.spzx.model.vo.h5.UserInfoVo;
 import com.aqiu.spzx.user.mapper.UserInfoMapper;
 import com.aqiu.spzx.user.service.UserInfoService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -77,5 +79,17 @@ public class UserInfoServiceImpl implements UserInfoService {
         String token = UUID.randomUUID().toString().replaceAll("-", "");
         redisTemplate.opsForValue().set("user:spzx:" + token, JSON.toJSONString(userInfo), 30, TimeUnit.DAYS);
         return token;
+    }
+
+    @Override
+    public UserInfoVo getUserInfoByToken(String token) {
+        String userInfoStr = redisTemplate.opsForValue().get("user:spzx:" + token);
+        if(StringUtils.isBlank(userInfoStr)){
+            throw new GuiguException(ResultCodeEnum.LOGIN_AUTH) ;
+        }
+        UserInfo userInfo = JSON.parseObject(userInfoStr, UserInfo.class);
+        UserInfoVo userInfoVo = new UserInfoVo();
+        BeanUtils.copyProperties(userInfo, userInfoVo);
+        return userInfoVo;
     }
 }
