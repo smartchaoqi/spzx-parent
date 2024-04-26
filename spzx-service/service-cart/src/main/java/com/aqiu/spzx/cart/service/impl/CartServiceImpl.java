@@ -13,10 +13,7 @@ import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,6 +83,27 @@ public class CartServiceImpl implements CartService {
             cartInfo.setIsChecked(isChecked);
             redisTemplate.opsForHash().put(cartKey,skuId.toString(),JSON.toJSONString(cartInfo));
         }
+    }
+
+    @Override
+    public void allCheckCart(Integer isChecked) {
+        Long userId = AuthContextUtil.getUserInfo().getId();
+        String cartKey = getCartKey(userId);
+        Map<Object, Object> entries = redisTemplate.opsForHash().entries(cartKey);
+        if(entries.size()>0){
+            entries.forEach((k,v)->{
+                CartInfo cartInfo = JSON.parseObject(v.toString(), CartInfo.class);
+                cartInfo.setIsChecked(isChecked);
+                redisTemplate.opsForHash().put(cartKey,k.toString(),JSON.toJSONString(cartInfo));
+            });
+        }
+    }
+
+    @Override
+    public void clearCart() {
+        Long userId = AuthContextUtil.getUserInfo().getId();
+        String cartKey = getCartKey(userId);
+        redisTemplate.delete(cartKey);
     }
 
     private String getCartKey(Long userId) {
