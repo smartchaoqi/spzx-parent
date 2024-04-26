@@ -69,6 +69,13 @@ public class CartServiceImpl implements CartService {
         return new ArrayList<>();
     }
 
+    @Override
+    public void deleteCart(Long skuId) {
+        Long userId = AuthContextUtil.getUserInfo().getId();
+        String cartKey = getCartKey(userId);
+        redisTemplate.opsForHash().delete(cartKey,skuId.toString());
+    }
+
     private String getCartKey(Long userId) {
         //定义key user:cart:userId
         return "user:cart:" + userId;
