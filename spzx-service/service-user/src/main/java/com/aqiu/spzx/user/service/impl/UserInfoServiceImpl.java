@@ -1,7 +1,9 @@
 package com.aqiu.spzx.user.service.impl;
 
 import com.alibaba.excel.util.StringUtils;
+import com.alibaba.fastjson.JSON;
 import com.aqiu.spzx.common.exception.GuiguException;
+import com.aqiu.spzx.model.dto.h5.UserLoginDto;
 import com.aqiu.spzx.model.dto.h5.UserRegisterDto;
 import com.aqiu.spzx.model.entity.user.UserInfo;
 import com.aqiu.spzx.model.vo.common.ResultCodeEnum;
@@ -11,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
@@ -50,5 +55,27 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfoMapper.save(userInfo);
         // 删除Redis中的数据
         redisTemplate.delete("phone:code:" + username) ;
+    }
+
+    @Override
+    public String login(UserLoginDto userLoginDto) {
+        String username = userLoginDto.getUsername();
+        String password = userLoginDto.getPassword();
+        if (StringUtils.isBlank(username)||StringUtils.isBlank(password)){
+            throw new GuiguException(ResultCodeEnum.DATA_ERROR);
+        }
+        UserInfo userInfo=userInfoMapper.findByUsername(username);
+        if(userInfo==null){
+            throw new GuiguException(ResultCodeEnum.LOGIN_ERROR);
+        }
+        if(!userInfo.getPassword().equals(DigestUtils.md5DigestAsHex(password.getBytes()))){
+            throw new GuiguException(ResultCodeEnum.LOGIN_ERROR);
+        }
+        if (userInfo.getStatus()==0){
+            throw new GuiguException(ResultCodeEnum.ACCOUNT_STOP);
+        }
+        String token = UUID.randomUUID().toString().replaceAll("-", "");
+        redisTemplate.opsForValue().set("user:spzx:" + token, JSON.toJSONString(userInfo), 30, TimeUnit.DAYS);
+        return token;
     }
 }

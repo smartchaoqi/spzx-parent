@@ -1,6 +1,8 @@
 package com.aqiu.spzx.user.controller;
 
+import com.aqiu.spzx.model.dto.h5.UserLoginDto;
 import com.aqiu.spzx.model.dto.h5.UserRegisterDto;
+import com.aqiu.spzx.model.entity.user.UserInfo;
 import com.aqiu.spzx.model.vo.common.Result;
 import com.aqiu.spzx.model.vo.common.ResultCodeEnum;
 import com.aqiu.spzx.user.service.UserInfoService;
@@ -21,5 +23,11 @@ public class UserInfoController {
     public Result register(@RequestBody UserRegisterDto userRegisterDto){
         userInfoService.register(userRegisterDto);
         return Result.build(null, ResultCodeEnum.SUCCESS);
+    }
+
+    @PostMapping("login")
+    public Result login(@RequestBody UserLoginDto userLoginDto) {
+        String token = userInfoService.login(userLoginDto);
+        return Result.build(token, ResultCodeEnum.SUCCESS);
     }
 }
