@@ -51,4 +51,10 @@ public class CartController {
         cartService.clearCart();
         return Result.build(null, ResultCodeEnum.SUCCESS);
     }
+
+    @GetMapping(value = "/auth/getAllChecked")
+    public List<CartInfo> getAllChecked() {
+        List<CartInfo> cartInfoList = cartService.getAllChecked();
+        return cartInfoList;
+    }
 }
