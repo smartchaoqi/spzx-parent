@@ -30,4 +30,12 @@
                      #{skuNum}
                  )
     </insert>
+    <select id="findOrderItemList" resultMap="orderItemMap">
+        select <include refid="columns" />
+        from order_item
+        where
+        order_id = #{orderInfoId}
+        and is_deleted = 0
+        order by id desc
+    </select>
 </mapper>

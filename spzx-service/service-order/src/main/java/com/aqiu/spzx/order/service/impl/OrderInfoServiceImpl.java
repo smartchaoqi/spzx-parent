@@ -19,6 +19,8 @@ import com.aqiu.spzx.order.mapper.OrderItemMapper;
 import com.aqiu.spzx.order.mapper.OrderLogMapper;
 import com.aqiu.spzx.order.service.OrderInfoService;
 import com.aqiu.spzx.utils.AuthContextUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -152,5 +154,17 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         tradeVo.setOrderItemList(orderItemList);
         tradeVo.setTotalAmount(totalPrice);
         return tradeVo;
+    }
+
+    @Override
+    public PageInfo<OrderInfo> findUserPage(Integer page, Integer limit, Integer orderStatus) {
+        PageHelper.startPage(page,limit);
+        Long userId = AuthContextUtil.getUserInfo().getId();
+        List<OrderInfo> orderInfoList = orderInfoMapper.findUserOrderList(userId, orderStatus);
+        orderInfoList.forEach(orderInfo -> {
+            List<OrderItem> orderItemList = orderItemMapper.findOrderItemList(orderInfo.getId());
+            orderInfo.setOrderItemList(orderItemList);
+        });
+        return new PageInfo<>(orderInfoList);
     }
 }
