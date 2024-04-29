@@ -6,4 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface OrderInfoMapper {
     void save(OrderInfo orderInfo);
+
+    OrderInfo getById(Long orderId);
 }

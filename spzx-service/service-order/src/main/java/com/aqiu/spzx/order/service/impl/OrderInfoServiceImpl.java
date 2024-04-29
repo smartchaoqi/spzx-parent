@@ -129,4 +129,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         cartFeignClient.deleteChecked();
         return orderInfo.getId();
     }
+
+    @Override
+    public OrderInfo getOrderInfoById(Long orderId) {
+        return orderInfoMapper.getById(orderId);
+    }
 }
