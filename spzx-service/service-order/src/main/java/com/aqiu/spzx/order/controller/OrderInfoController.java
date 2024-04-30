@@ -48,4 +48,10 @@ public class OrderInfoController {
         PageInfo<OrderInfo> pageInfo = orderInfoService.findUserPage(page, limit, orderStatus);
         return Result.build(pageInfo, ResultCodeEnum.SUCCESS);
     }
+
+    @GetMapping("auth/getOrderInfoByOrderNo/{orderNo}")
+    public OrderInfo getOrderInfoByOrderNo(@PathVariable String orderNo) {
+        OrderInfo orderInfo = orderInfoService.getOrderInfoByOrderNo(orderNo);
+        return orderInfo;
+    }
 }
