@@ -8,4 +8,6 @@ public interface PaymentInfoMapper {
     PaymentInfo getByOrderNo(String orderNo);
 
     void save(PaymentInfo paymentInfo);
+
+    void updateById(PaymentInfo paymentInfo);
 }
